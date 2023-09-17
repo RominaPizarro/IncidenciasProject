@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from control_incidencias.core.models import *
+from .models import Area, Rol, Estado, Usuario, Requerimiento
 
 # Register your models here.
 

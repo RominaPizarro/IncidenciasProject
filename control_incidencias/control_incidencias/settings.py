@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'core',
+    'core'
 ]
 
 MIDDLEWARE = [
@@ -84,9 +84,9 @@ WSGI_APPLICATION = "control_incidencias.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.oracle',
-        'NAME': '127.0.0.1:1521/orcl',
+        'NAME': '127.0.0.1:1521/xe',
         'USER': 'INCIDENCIAS',
-        'PASSWORD': '123',
+        'PASSWORD': 'incidencias_123',
         'TEST': {
             'USER': 'default_test',
             'TBLSPACE': 'default_test_tbls',
