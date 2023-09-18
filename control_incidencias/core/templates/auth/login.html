@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block css %}
+{% endblock %}
+
+{% block contenido %}
+
+    <div class="container mt-3">
+        <h3>Login</h3>
+        <hr>
+
+        <div class="col-6">
+            <form id="formulario" action="{% url 'login_' %}" method="post" class="needs-validation" novalidate>
+                <div class="mb-2">
+                    <label for="username" class="form-label">Usuario <b class="text-danger">*</b></label>
+                    <input class="form-control" type="text" name="username" required>
+
+                    <div class="invalid-feedback">El campo Usuario es requerido</div>
+                </div>
+                <div class="mb-2">
+                    <label for="password" class="form-label">Password <b class="text-danger">*</b></label>
+                    <input class="form-control" type="password" name="password" required>
+
+                    <div class="invalid-feedback">El campo Password es requerido</div>
+                </div>
+
+                <div class="mb-5 text-end">
+                    <a href="./reset-password.html">¿Olvidaste tu contraseña?</a>
+                </div>
+
+                <input class="btn btn-primary" type="submit" name="action" value="Login">
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+    'use strict'
+  
+    var forms = document.querySelectorAll('.needs-validation')
+  
+    Array.prototype.slice.call(forms)
+      .forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+  
+          form.classList.add('was-validated')
+        }, false)
+      })
+    })()
+    </script>
+{% endblock %}

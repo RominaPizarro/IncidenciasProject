@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-4 mt-5">
+            <div class="card">
+            <div class="card-body">
+                <form action="{% url 'login' %}" method="POST">
+                    {% csrf_token %}
+
+                    {% if error %}
+                        <small class="text-danger">{{ error }}</small>
+                    {% endif %}
+
+                    {% comment %} {% if messages %}
+                        {% for message in messages %}
+                            <small class="text-success">{{ message }}</small>
+                        {% endfor %}
+                    {% endif %} {% endcomment %}
+
+                    {% comment %} <div class="form-group">
+                        <label for="role">Rol:</label>
+                        <select class="form-control" id="role" name="role">
+                            <option value="admin">Administrador</option>
+                            <option value="admin">Cliente</option>
+                            <!-- Agrega las opciones de roles que correspondan -->
+                        </select>
+                    </div> {% endcomment %}
+                    
+
+                    <div class="mb-3">
+                        <label for="" class="form-label">Usuario</label>
+                        <input type="text" class="form-control" name="usuario" id="usuario">
+                        <small class="text-danger" id="usuario-error"></small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" name="pass" id="pass">
+                        <small class="text-danger" id="pass-error"></small>
+                    </div>
+            
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">INICIAR SESIÓN</button>
+                    </div>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+    
