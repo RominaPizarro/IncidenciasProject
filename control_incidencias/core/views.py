@@ -16,19 +16,25 @@ from django.contrib import messages
 def index(request):
     return render(request, 'index.html')
 
+#AUTH
+
 def login_view(request):
     return render(request, 'auth/login.html')
 
 def reset_password(request):
     return render(request, 'auth/reset-password.html')
 
-def inicio_sesion(request): 
-    
-    messages.success(request, 'bienvendio a la pagina de inicio de sesion')
-    
+def inicio_sesion(request):     
     if request.method == 'POST':
         usuario = request.POST.get('usuario')
         clave = request.POST.get('password')
+        
+        res = create_default()
+        if res is not None:
+            context = {
+                'success' : res
+                }
+            return render(request, 'auth/login.html', context)
         
         user = authenticate(request, username=usuario, password=clave)
         if user is not None:
@@ -55,10 +61,32 @@ def inicio_sesion(request):
         
     return render(request, 'auth/login.html')
 
+def create_default():
+    usuario = Usuario.objects.first()
+    
+    if usuario is not None:
+        return None
+    
+    first_name = 'Default'
+    last_name = 'Default'
+    email = 'administrador@gmail.com'
+    username = 'administrador'
+    password = '123456'
+    rut = '10020030'
+    telefono = ''
+    fecha_nacimiento = '1990-01-01'
+    
+    user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name, email=email, password=password)
+    role = 'admin'
+        
+    Usuario.objects.create(user=user, role=role, rut=rut, telefono=telefono, fecha_nacimiento=fecha_nacimiento)
+    
+    return 'Usuario default creado: [ Username: administrador ] - [ Password: 123456 ]'
+
 @role_required('cliente','admin')
 def logout_view(request):
     logout(request)
-    return redirect('inicio_sesion')
+    return redirect('login_view')
 
 def register(request):
     if request.method == 'POST':        
@@ -81,9 +109,9 @@ def register(request):
 
 #ADMIN
 @login_required
-#@role_required('admin')
-def dashboardAdmin(request):
-    return render(request, 'admin/index.html')
+@role_required('admin')
+def dashboard_admin(request):
+    return render(request, 'admin/dashboard.html')
 
 
 # @login_required
@@ -133,8 +161,8 @@ def usuario_delete(request, pk):
 
 #CLIENTE
 
-#@role_required('cliente')
 @login_required
-def dashboardCliente(request):
+@role_required('cliente')
+def dashboard_cliente(request):
     return render(request, 'cliente/index.html')
 
