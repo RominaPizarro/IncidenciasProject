@@ -137,3 +137,5 @@ ROLES = (
     ('admin', 'Administrador'),
     ('cliente', 'Cliente'),
 )
+
+DATE_INPUT_FORMATS = 'd-m-Y'

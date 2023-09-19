@@ -3,9 +3,10 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
+
 from .decorators import role_required
 
-from .models import Usuario
+from .models import Usuario, Area, Estado, Requerimiento
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 
@@ -144,18 +145,24 @@ def exists_user(username):
 @login_required
 @role_required('admin')
 def usuario_index(request):
+    context = {}
+    
     filter = request.GET.get('filter')
     
     if filter == None:
         filter = ''
+        
+    if 'success' in request.session.keys():
+        context['success'] = request.session['success']
+        del request.session['success']
     
+    if 'error' in request.session.keys():
+        context['error'] = request.session['error']
+        del request.session['error']
+        
     usuarios = Usuario.objects.filter(rut__contains=filter)
-    context = {
-        'filter' : filter,
-        'usuarios': usuarios
-        }
-    
-    print(usuarios)
+    context['filter'] = filter
+    context['usuarios'] = usuarios
     
     return render(request, 'admin/usuario/index.html', context)
     
@@ -185,47 +192,133 @@ def usuario_create(request):
             user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name, email=email, password=password)            
             Usuario.objects.create(user=user, role=role, rut=rut, telefono=telefono, fecha_nacimiento=fecha_nacimiento)
             
-            context = { 'success': 'Usuario registrado' }
+            context['success'] = 'Usuario registrado' 
             
         except Exception as e:
-            context = { 'error': e.__str__ }
+            context['error'] = e.__str__ 
             
     return render(request, 'admin/usuario/create.html', context)
 
-# @login_required
+@login_required
+@role_required('admin')
 def usuario_update(request, id):
     usuario = get_object_or_404(Usuario, pk=id)
-    context = {'usuario': usuario}
+    context = {}    
     
     if request.method == 'POST':
         try:
-            usuario.username = request.POST.get('username')
-            usuario.first_name = request.POST.get('first_name')
-            usuario.last_name = request.POST.get('last_name')
-            usuario.email = request.POST.get('email')
-            
-            raise Exception('ACTUALIZACION MODIFICADA')
+            usuario.user.first_name = request.POST.get('nombres')
+            usuario.user.last_name = request.POST.get('apellidos')
+            usuario.user.email = request.POST.get('email')
+            usuario.telefono = request.POST.get('telefono')
+            usuario.fecha_nacimiento = request.POST.get('fecha_nacimiento')
+            usuario.role = request.POST.get('role')
             usuario.save()
+            
+            request.session['success'] = 'Usuario actualizado'
 
-            # role = request.POST.get('role')
-            # user_profile.role = role
-            # user_profile.save() 
-
-            context['success'] = 'Usuario actualizado'
+            return redirect('usuario_index')
         except Exception as e:
             context['error'] = e.__str__
-    
+    context['usuario'] = usuario
     return render(request, 'admin/usuario/edit.html', context)
 
-# @login_required
-def usuario_delete(request, pk):
-    usuario = get_object_or_404(User, pk=pk)
-    if request.method == 'POST':
+@login_required
+@role_required('admin')
+def usuario_delete(request, id):
+    usuario = get_object_or_404(Usuario, pk=id)
+    try:
         usuario.delete()
-        return redirect('usuario_list')
-    context = {'usuario': usuario}
-    return render(request, 'usuarios/delete.html', context)
+        request.session['success'] = 'Usuario eliminado'
+    except Exception as e:
+        request.session['error'] = 'No se pudo eliminar el usuario' + e.__str__
+    
+    return redirect('usuario_index')
 
+#AREAS
+def exists_area(nombre):
+    try:
+        Area.objects.get(nombre=nombre)                
+        return True
+    except Area.DoesNotExist:
+        return False
+@login_required
+@role_required('admin')
+def area_index(request):
+    context = {}
+    
+    filter = request.GET.get('filter')
+    
+    if filter == None:
+        filter = ''
+        
+    if 'success' in request.session.keys():
+        context['success'] = request.session['success']
+        del request.session['success']
+    
+    if 'error' in request.session.keys():
+        context['error'] = request.session['error']
+        del request.session['error']
+        
+    areas = Area.objects.filter(nombre__contains=filter)
+    context['filter'] = filter
+    context['areas'] = areas
+    
+    return render(request, 'admin/area/index.html', context)
+    
+
+@login_required
+@role_required('admin')
+def area_create(request):
+    context = {}
+    if request.method == 'POST':
+        try:
+            nombre = request.POST.get('nombre')
+            descripcion = request.POST.get('descripcion')
+            
+            if exists_area(nombre):
+                raise Exception('Ya existe un area con el mismo nombre')
+                      
+            Area.objects.create(nombre=nombre, descripcion=descripcion)
+            
+            context['success'] = 'Area registrado' 
+            
+        except Exception as e:
+            context['error'] = e.__str__ 
+            
+    return render(request, 'admin/area/create.html', context)
+
+@login_required
+@role_required('admin')
+def area_update(request, id):
+    area = get_object_or_404(Area, pk=id)
+    context = {}    
+    
+    if request.method == 'POST':
+        try:
+            area.nombre = request.POST.get('nombre')
+            area.descripcion = request.POST.get('descripcion')
+            area.save()
+            
+            request.session['success'] = 'Area actualizado'
+
+            return redirect('area_index')
+        except Exception as e:
+            context['error'] = e.__str__
+    context['area'] = area
+    return render(request, 'admin/area/edit.html', context)
+
+@login_required
+@role_required('admin')
+def area_delete(request, id):
+    area = get_object_or_404(Area, pk=id)
+    try:
+        area.delete()
+        request.session['success'] = 'Area eliminado'
+    except Exception as e:
+        request.session['error'] = 'No se pudo eliminar el area' + e.__str__
+    
+    return redirect('area_index')
 
 #CLIENTE
 

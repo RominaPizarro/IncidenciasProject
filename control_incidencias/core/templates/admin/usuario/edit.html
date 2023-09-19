@@ -46,21 +46,21 @@
                     <div class="mb-2">
                         <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento <b
                                 class="text-danger">*</b></label>
-                        <input class="form-control" type="date" name="fecha_nacimiento" value="{{ usuario.fecha_nacimiento }}" required>
+                        <input class="form-control" type="date" name="fecha_nacimiento" value="{{ usuario.fecha_nacimiento |date:"Y-m-d"}}" required>
                         
                         <div class="invalid-feedback">El campo Fecha de nacimiento es requerido</div>
                     </div>
 
                     <div class="mb-2">
                         <label for="username" class="form-label">Usuario <b class="text-danger">*</b></label>
-                        <input class="form-control" type="text" name="username" value="{{ usuario.user.username }}" required>
+                        <input class="form-control" type="text" name="username" value="{{ usuario.user.username }}" required readonly>
                         
                         <div class="invalid-feedback">El campo Usuario es requerido</div>
                     </div>
 
                     <div class="mb-2">
-                        <label for="rol" class="form-label">Rol <b class="text-danger">*</b></label>
-                        <select name="rol" class="form-control" required>
+                        <label for="role" class="form-label">Rol <b class="text-danger">*</b></label>
+                        <select name="role" class="form-control" required>
                             {% if usuario.role == 'admin' %}
                                 <option value="admin" selected>Administrador</option>
                                 <option value="cliente">Personal</option>

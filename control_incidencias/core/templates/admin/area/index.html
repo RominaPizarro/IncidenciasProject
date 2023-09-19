@@ -1,0 +1,58 @@
+{% extends 'base-admin.html' %}
+
+{% block css %}
+{% endblock %}
+
+{% block contenido %}
+
+    <div class="container mt-3">
+        <h3>Áreas</h3>
+        <hr>
+
+        {% include 'message.html' %}
+
+        <form action="{% url 'area_index' %}" method="get">
+            <label for="filter" class="form-label">Buscar por nombre de área</label>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <input type="text" class="form-control" name="filter">
+                </div>
+                <div class="col-auto">
+                    <input class="btn btn-dark" type="submit" value="Buscar">
+                </div>
+                <div class="col text-end">
+                    <a class="btn btn-success" href="{% url 'area_create' %}">Crear Nuevo</a>
+                </div>
+            </div>
+        </form>
+
+        <table class="table mt-3">
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th></th>
+            </tr>
+            {% for item in areas %}
+            <tr>
+                <td>{{ item.nombre }}</td>
+                <td>{{ item.descripcion }}</td>
+                <td class="text-end">
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Opciones
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'area_update' id=item.id %}">Editar</a></li>
+                            <li><a class="dropdown-item" href="{% url 'area_delete' id=item.id %}">Eliminar</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}
+
+{% block js %}    
+{% endblock %}
