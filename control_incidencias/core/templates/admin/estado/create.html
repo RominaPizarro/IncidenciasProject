@@ -6,21 +6,21 @@
 {% block contenido %}
 
     <div class="container mt-3">
-        <h3>Área : Crear</h3>
+        <h3>Estado : Crear</h3>
         <hr>
 
         {% include 'message.html' %}
 
-        <form action="{% url 'area_create' %}" method="post" class="needs-validation" novalidate>
+        <form action="{% url 'estado_create' %}" method="post" class="needs-validation" novalidate>
             {% csrf_token %}
             
             <div class="row">
                 <div class="col-12">
                     <div class="mb-2">
-                        <label for="nombre" class="form-label">Nombre de área <b class="text-danger">*</b></label>
+                        <label for="nombre" class="form-label">Nombre de estado <b class="text-danger">*</b></label>
                         <input class="form-control" type="text" name="nombre" required>
                                                 
-                        <div class="invalid-feedback">El campo Nombre de área es requerido</div>
+                        <div class="invalid-feedback">El campo Nombre de estado es requerido</div>
                     </div>
 
                     <div class="mb-2">
@@ -31,7 +31,7 @@
             </div>
             <div class="mt-2">
                 <input class="btn btn-primary" type="submit" name="action" value="Registrar">
-                <a class="btn btn-danger" href="{% url 'area_index' %}"> Cancelar</a>
+                <a class="btn btn-danger" href="{% url 'estado_index' %}"> Cancelar</a>
             </div>
 
         </form>

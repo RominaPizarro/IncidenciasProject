@@ -1,6 +1,13 @@
+def exists_estado(nombre):
+    try:
+        Estado.objects.get(nombre=nombre)                
+        return True
+    except Estado.DoesNotExist:
+        return False
+
 @login_required
 @role_required('admin')
-def area_index(request):
+def estado_index(request):
     context = {}
     
     filter = request.GET.get('filter')
@@ -16,62 +23,62 @@ def area_index(request):
         context['error'] = request.session['error']
         del request.session['error']
         
-    areas = Area.objects.filter(nombre__contains=filter)
+    estados = stado.objects.filter(nombre__contains=filter)
     context['filter'] = filter
-    context['areas'] = areas
+    context['estados'] = estados
     
-    return render(request, 'admin/area/index.html', context)
+    return render(request, 'admin/estado/index.html', context)
     
 
 @login_required
 @role_required('admin')
-def area_create(request):
+def estado_create(request):
     context = {}
     if request.method == 'POST':
         try:
             nombre = request.POST.get('nombre')
             descripcion = request.POST.get('descripcion')
             
-            if exists_area(nombre):
-                raise Exception('Ya existe un area con el mismo nombre')
+            if exists_estado(nombre):
+                raise Exception('Ya existe un estado con el mismo nombre')
                       
-            Area.objects.create(nombre=nombre, descripcion=descripcion)
+            Estado.objects.create(nombre=nombre, descripcion=descripcion)
             
-            context['success'] = 'Area registrado' 
+            context['success'] = 'Estado registrado' 
             
         except Exception as e:
             context['error'] = e.__str__ 
             
-    return render(request, 'admin/area/create.html', context)
+    return render(request, 'admin/estado/create.html', context)
 
 @login_required
 @role_required('admin')
-def area_update(request, id):
-    area = get_object_or_404(Area, pk=id)
+def estado_update(request, id):
+    estado = get_object_or_404(Estado, pk=id)
     context = {}    
     
     if request.method == 'POST':
         try:
-            area.user.nombre = request.POST.get('nombre')
-            area.user.descripcion = request.POST.get('descripcion')
-            area.save()
+            estado.nombre = request.POST.get('nombre')
+            estado.descripcion = request.POST.get('descripcion')
+            estado.save()
             
-            request.session['success'] = 'Area actualizado'
+            request.session['success'] = 'Estado actualizado'
 
-            return redirect('area_index')
+            return redirect('estado_index')
         except Exception as e:
             context['error'] = e.__str__
-    context['area'] = area
-    return render(request, 'admin/area/edit.html', context)
+    context['estado'] = estado
+    return render(request, 'admin/estado/edit.html', context)
 
 @login_required
 @role_required('admin')
-def area_delete(request, id):
-    area = get_object_or_404(Area, pk=id)
+def estado_delete(request, id):
+    estado = get_object_or_404(Estado, pk=id)
     try:
-        area.delete()
-        request.session['success'] = 'Area eliminado'
+        estado.delete()
+        request.session['success'] = 'Estado eliminado'
     except Exception as e:
-        request.session['error'] = 'No se pudo eliminar el area' + e.__str__
+        request.session['error'] = 'No se pudo eliminar el estado' + e.__str__
     
-    redirect('area_index')
+    return redirect('estado_index')

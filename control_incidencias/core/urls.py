@@ -5,6 +5,7 @@ from .views import index, inicio_sesion, logout, logout_view, login_view, regist
 from .views import dashboard_admin
 from .views import usuario_index, usuario_create, usuario_update, usuario_delete
 from .views import area_index, area_create, area_update, area_delete
+from .views import estado_index, estado_create, estado_update, estado_delete
 
 from .views import dashboard_cliente
 
@@ -30,6 +31,11 @@ urlpatterns = [
     path('areas/create', area_create, name="area_create"),
     path('areas/<int:id>', area_update, name="area_update"),
     path('areas/<int:id>/delete', area_delete, name="area_delete"),
+    
+    path('estados', estado_index, name="estado_index"),
+    path('estados/create', estado_create, name="estado_create"),
+    path('estados/<int:id>', estado_update, name="estado_update"),
+    path('estados/<int:id>/delete', estado_delete, name="estado_delete"),
     
     #CLIENTE
     path('dashboard-cliente', dashboard_cliente, name="dashboard_cliente"),
