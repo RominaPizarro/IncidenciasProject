@@ -1,91 +1,93 @@
-{% extends 'base.html' %}
+{% extends 'base-admin.html' %}
 
 {% block css %}
 {% endblock %}
 
 {% block contenido %}
     <div class="container mt-3">
-        <h3>Registrarse</h3>
+        <h3>Usuario : Editar</h3>
         <hr>
 
         {% include 'message.html' %}
-        
-        <form action="{% url 'register' %}" method="post" class="needs-validation" novalidate>
+
+        <form action="{% url 'usuario_update' id=usuario.id %}" method="post" class="needs-validation" novalidate>
             {% csrf_token %}
 
             <div class="d-flex flex-row">
                 <div class="col-6 me-1">
                     <div class="mb-2">
                         <label for="nombres" class="form-label">Nombres <b class="text-danger">*</b></label>
-                        <input class="form-control" type="text" name="nombres" required>
+                        <input class="form-control" type="text" name="nombres" value="{{ usuario.user.first_name }}" required>
                         
                         <div class="invalid-feedback">El campo Nombres es requerido</div>
                     </div>
 
                     <div class="mb-2">
                         <label for="apellidos" class="form-label">Apellidos <b class="text-danger">*</b></label>
-                        <input class="form-control" type="text" name="apellidos" required>
+                        <input class="form-control" type="text" name="apellidos" value="{{ usuario.user.last_name }}" required>
                         
                         <div class="invalid-feedback">El campo Apellidos es requerido</div>
                     </div>
 
                     <div class="mb-2">
                         <label for="email" class="form-label">Email <b class="text-danger">*</b></label>
-                        <input class="form-control" type="email" name="email" required>
+                        <input class="form-control" type="email" name="email" value="{{ usuario.user.email }}" required>
                         
                         <div class="invalid-feedback">El campo Email es requerido</div>
                     </div>
 
                     <div class="mb-2">
-                        <label for="telefono" class="form-label">Telefono</label>
-                        <input class="form-control" type="text" name="telefono" >
+                        <label for="telefono" class="form-label">Telefono <b class="text-danger">*</b></label>
+                        <input class="form-control" type="text" name="telefono" value="{{ usuario.telefono }}" >
                     </div>
                 </div>
 
                 <div class="col-6 ms-1">
                     <div class="mb-2">
-                        <label for="rut" class="form-label">Rut <b class="text-danger">*</b></label>
-                        <input class="form-control" type="text" name="rut" required>
-                        
-                        <div class="invalid-feedback">El campo Rut es requerido</div>
-                    </div>
-                    <div class="mb-2">
                         <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento <b
                                 class="text-danger">*</b></label>
-                        <input class="form-control" type="date" name="fecha_nacimiento" required>
+                        <input class="form-control" type="date" name="fecha_nacimiento" value="{{ usuario.fecha_nacimiento }}" required>
                         
                         <div class="invalid-feedback">El campo Fecha de nacimiento es requerido</div>
                     </div>
 
                     <div class="mb-2">
                         <label for="username" class="form-label">Usuario <b class="text-danger">*</b></label>
-                        <input class="form-control" type="text" name="username" required>
+                        <input class="form-control" type="text" name="username" value="{{ usuario.user.username }}" required>
                         
                         <div class="invalid-feedback">El campo Usuario es requerido</div>
                     </div>
 
                     <div class="mb-2">
-                        <label for="password" class="form-label">Password <b class="text-danger">*</b></label>
-                        <input class="form-control" type="password" name="password" required>
+                        <label for="rol" class="form-label">Rol <b class="text-danger">*</b></label>
+                        <select name="rol" class="form-control" required>
+                            {% if usuario.role == 'admin' %}
+                                <option value="admin" selected>Administrador</option>
+                                <option value="cliente">Personal</option>
+                            {% endif %}
+                            {% if usuario.role == 'cliente' %}
+                                <option value="admin">Administrador</option>
+                                <option value="cliente" selected>Personal</option>
+                            {% endif %}
+                        </select>
                         
-                        <div class="invalid-feedback">El campo Password es requerido</div>
+                        <div class="invalid-feedback">El campo Rol es requerido</div>
                     </div>
                 </div>
             </div>
 
             <div class="mb-2">
-                <input class="btn btn-primary" type="submit" name="action" value="Registrar">
-                <a class="btn btn-danger" href="{% url 'login_view' %}"> Cancelar</a>
+                <input class="btn btn-primary" type="submit" name="action" value="Actualizar">
+                <a class="btn btn-danger" href="{% url 'usuario_index' %}"> Cancelar</a>
             </div>
 
         </form>
     </div>
 {% endblock %}
 
-
-{% block js %}
-    <script>
-
+{% block js %}  
+<script>
+        
     (function () {
     'use strict'
     

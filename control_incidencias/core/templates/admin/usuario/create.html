@@ -1,20 +1,27 @@
-{% extends 'base.html' %}
+{% extends 'base-admin.html' %}
 
 {% block css %}
 {% endblock %}
 
 {% block contenido %}
     <div class="container mt-3">
-        <h3>Registrarse</h3>
+        <h3>Usuario : Crear</h3>
         <hr>
 
         {% include 'message.html' %}
-        
-        <form action="{% url 'register' %}" method="post" class="needs-validation" novalidate>
+
+        <form action="{% url 'usuario_create' %}" method="post" class="needs-validation" novalidate>
             {% csrf_token %}
 
             <div class="d-flex flex-row">
-                <div class="col-6 me-1">
+                <div class="col-6 me-1 mb-2">
+                    <div class="mb-2">
+                        <label for="rut" class="form-label">Rut <b class="text-danger">*</b></label>
+                        <input class="form-control" type="text" name="rut" required>
+                        
+                        <div class="invalid-feedback">El campo Rut es requerido</div>
+                    </div>
+                    
                     <div class="mb-2">
                         <label for="nombres" class="form-label">Nombres <b class="text-danger">*</b></label>
                         <input class="form-control" type="text" name="nombres" required>
@@ -44,12 +51,6 @@
 
                 <div class="col-6 ms-1">
                     <div class="mb-2">
-                        <label for="rut" class="form-label">Rut <b class="text-danger">*</b></label>
-                        <input class="form-control" type="text" name="rut" required>
-                        
-                        <div class="invalid-feedback">El campo Rut es requerido</div>
-                    </div>
-                    <div class="mb-2">
                         <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento <b
                                 class="text-danger">*</b></label>
                         <input class="form-control" type="date" name="fecha_nacimiento" required>
@@ -58,10 +59,10 @@
                     </div>
 
                     <div class="mb-2">
-                        <label for="username" class="form-label">Usuario <b class="text-danger">*</b></label>
+                        <label for="username" class="form-label">Username <b class="text-danger">*</b></label>
                         <input class="form-control" type="text" name="username" required>
                         
-                        <div class="invalid-feedback">El campo Usuario es requerido</div>
+                        <div class="invalid-feedback">El campo Username es requerido</div>
                     </div>
 
                     <div class="mb-2">
@@ -70,22 +71,31 @@
                         
                         <div class="invalid-feedback">El campo Password es requerido</div>
                     </div>
+
+                    <div class="mb-2">
+                        <label for="role" class="form-label">Rol <b class="text-danger">*</b></label>
+                        <select name="role" class="form-control" required>
+                            <option value="admin">Administrador</option>
+                            <option value="cliente">Personal</option>
+                        </select>
+                        
+                        <div class="invalid-feedback">El campo Password es requerido</div>
+                    </div>
                 </div>
             </div>
 
             <div class="mb-2">
                 <input class="btn btn-primary" type="submit" name="action" value="Registrar">
-                <a class="btn btn-danger" href="{% url 'login_view' %}"> Cancelar</a>
+                <a class="btn btn-danger" href="{% url 'usuario_index' %}"> Cancelar</a>
             </div>
 
         </form>
     </div>
 {% endblock %}
 
-
-{% block js %}
-    <script>
-
+{% block js %}  
+<script>
+        
     (function () {
     'use strict'
     

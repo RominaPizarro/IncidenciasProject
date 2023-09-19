@@ -3,6 +3,7 @@ from django.urls import path
 
 from .views import index, inicio_sesion, logout, logout_view, login_view, register, reset_password
 from .views import dashboard_admin
+from .views import usuario_index, usuario_create, usuario_update, usuario_delete
 from .views import dashboard_cliente
 
 urlpatterns = [
@@ -17,6 +18,11 @@ urlpatterns = [
     
     #ADMIN
     path('dashboard-admin', dashboard_admin, name="dashboard_admin"),
+    
+    path('usuarios', usuario_index, name="usuario_index"),
+    path('usuarios/create', usuario_create, name="usuario_create"),
+    path('usuarios/<int:id>', usuario_update, name="usuario_update"),
+    path('usuarios/<int:id>/delete', usuario_delete, name="usuario_delete"),
     
     #CLIENTE
     path('dashboard-cliente', dashboard_cliente, name="dashboard_cliente"),

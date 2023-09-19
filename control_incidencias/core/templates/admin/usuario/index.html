@@ -1,0 +1,68 @@
+{% extends 'base-admin.html' %}
+
+{% block css %}
+{% endblock %}
+
+{% block contenido %}
+
+    <div class="container mt-3">
+        <h3>Usuarios</h3>
+        <hr>
+
+        <form action="{% url 'usuario_index' %}" method="get">
+            <label for="filter" class="form-label">Buscar por RUT</label>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <input type="text" class="form-control" name="filter" value="{{filter}}">
+                </div>
+                <div class="col-auto">
+                    <input class="btn btn-dark" type="submit" value="Buscar">
+                </div>
+                <div class="col text-end">
+                    <a class="btn btn-success" href="{% url 'usuario_create' %}">Crear Nuevo</a>
+                </div>
+            </div>
+        </form>
+
+        <table class="table mt-3">
+            <tr>
+                <th>RUT</th>
+                <th>Nombres</th>
+                <th>Apellidos</th>
+                <th>Fecha de nacimiento</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Usuario</th>
+                <th>Rol</th>
+                <th></th>
+            </tr>
+            {% for item in usuarios %}
+            <tr>
+                <td>{{ item.rut }}</td>
+                <td>{{ item.user.first_name }}</td>
+                <td>{{ item.user.last_name }}</td>
+                <td>{{ item.fecha_nacimiento }}</td>
+                <td>{{ item.user.email }}</td>
+                <td>{{ item.telefono }}</td>
+                <td>{{ item.user.username }}</td>
+                <td>{{ item.role }}</td>
+                <td class="text-end">
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Opciones
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'usuario_update' id=item.id %}">Editar</a></li>
+                            <li><a class="dropdown-item" href="./index.html">Eliminar</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}
+
+{% block js %}    
+{% endblock %}
