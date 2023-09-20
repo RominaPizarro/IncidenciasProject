@@ -1,13 +1,13 @@
-def exists_estado(nombre):
+def exists_requerimiento(codigo):
     try:
-        Estado.objects.get(nombre=nombre)                
+        Requerimiento.objects.get(codigo=codigo)                
         return True
-    except Estado.DoesNotExist:
+    except Requerimiento.DoesNotExist:
         return False
 
 @login_required
 @role_required('admin')
-def estado_index(request):
+def requerimiento_index(request):
     context = {}
     
     filter = request.GET.get('filter')
@@ -23,62 +23,62 @@ def estado_index(request):
         context['error'] = request.session['error']
         del request.session['error']
         
-    estados = stado.objects.filter(nombre__contains=filter)
+    requerimientos = stado.objects.filter(codigo__contains=filter)
     context['filter'] = filter
-    context['estados'] = estados
+    context['requerimientos'] = requerimientos
     
-    return render(request, 'admin/estado/index.html', context)
+    return render(request, 'admin/requerimiento/index.html', context)
     
 
 @login_required
 @role_required('admin')
-def estado_create(request):
+def requerimiento_create(request):
     context = {}
     if request.method == 'POST':
         try:
-            nombre = request.POST.get('nombre')
+            codigo = request.POST.get('codigo')
             descripcion = request.POST.get('descripcion')
             
-            if exists_estado(nombre):
-                raise Exception('Ya existe un estado con el mismo nombre')
+            if exists_requerimiento(codigo):
+                raise Exception('Ya existe un requerimiento con el mismo codigo')
                       
-            Estado.objects.create(nombre=nombre, descripcion=descripcion)
+            Requerimiento.objects.create(codigo=codigo, descripcion=descripcion)
             
-            context['success'] = 'Estado registrado' 
+            context['success'] = 'Requerimiento registrado' 
             
         except Exception as e:
             context['error'] = e.__str__ 
             
-    return render(request, 'admin/estado/create.html', context)
+    return render(request, 'admin/requerimiento/create.html', context)
 
 @login_required
 @role_required('admin')
-def estado_update(request, id):
-    estado = get_object_or_404(Estado, pk=id)
+def requerimiento_update(request, id):
+    requerimiento = get_object_or_404(Requerimiento, pk=id)
     context = {}    
     
     if request.method == 'POST':
         try:
-            estado.nombre = request.POST.get('nombre')
-            estado.descripcion = request.POST.get('descripcion')
-            estado.save()
+            requerimiento.codigo = request.POST.get('codigo')
+            requerimiento.descripcion = request.POST.get('descripcion')
+            requerimiento.save()
             
-            request.session['success'] = 'Estado actualizado'
+            request.session['success'] = 'Requerimiento actualizado'
 
-            return redirect('estado_index')
+            return redirect('requerimiento_index')
         except Exception as e:
             context['error'] = e.__str__
-    context['estado'] = estado
-    return render(request, 'admin/estado/edit.html', context)
+    context['requerimiento'] = requerimiento
+    return render(request, 'admin/requerimiento/edit.html', context)
 
 @login_required
 @role_required('admin')
-def estado_delete(request, id):
-    estado = get_object_or_404(Estado, pk=id)
+def requerimiento_delete(request, id):
+    requerimiento = get_object_or_404(Requerimiento, pk=id)
     try:
-        estado.delete()
-        request.session['success'] = 'Estado eliminado'
+        requerimiento.delete()
+        request.session['success'] = 'Requerimiento eliminado'
     except Exception as e:
-        request.session['error'] = 'No se pudo eliminar el estado' + e.__str__
+        request.session['error'] = 'No se pudo eliminar el requerimiento' + e.__str__
     
-    return redirect('estado_index')
+    return redirect('requerimiento_index')

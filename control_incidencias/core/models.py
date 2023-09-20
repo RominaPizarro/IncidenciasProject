@@ -9,14 +9,14 @@ class Area(models.Model):
     descripcion = models.CharField(max_length=300, null=True, blank=True)
 
     def __str__(self):
-        return str(self.id) + '. ' + self.nombre
+        return self.nombre
 
 class Estado(models.Model):
     nombre = models.CharField(max_length=200, unique=True)
     descripcion = models.CharField(max_length=300, null=True, blank=True)
 
     def __str__(self):
-        return str(self.id) + '. ' + self.nombre
+        return self.nombre
 
 class Usuario(models.Model):
     rut = models.CharField(max_length=100, unique=True)
@@ -26,14 +26,15 @@ class Usuario(models.Model):
     role = models.CharField(max_length=20, choices=settings.ROLES)
     
     def __str__(self):
-        return self.user.username + ' - ' + self.role
+        return self.rut + ' - ' + self.user.first_name + ' ' + self.user.last_name
 
 class Requerimiento(models.Model):
     codigo = models.CharField(max_length=100, unique=True)
-    fecha_registro = models.DateTimeField()
+    fecha_registro = models.DateTimeField(auto_now_add=True)
     descripcion = models.CharField(max_length=500)
+    observaciones = models.CharField(max_length=1000, null=True, blank=True)
     usuario_reporta = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='requerimientos_reporta')
     area = models.ForeignKey(Area, on_delete=models.CASCADE, related_name='requerimientos')
-    usuario_asignado = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='requerimientos_asignado')
+    usuario_asignado = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='requerimientos_asignado', null=True)
     estado = models.ForeignKey(Estado, on_delete=models.CASCADE, related_name='requerimientos')
 

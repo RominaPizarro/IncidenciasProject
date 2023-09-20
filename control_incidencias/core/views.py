@@ -10,7 +10,9 @@ from .models import Usuario, Area, Estado, Requerimiento
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 
-from django.contrib import messages
+from django.db.models import Q
+from django.utils import timezone
+from django.utils import dateformat
 
 # Create your views here.
 
@@ -117,7 +119,7 @@ def register(request):
             
             return redirect('login_view')
         except Exception as e:
-            context = { 'error': e.__str__ }
+            context = { 'error': e.__str__() }
     return render(request, 'auth/register.html', context)
 
 #ADMIN
@@ -160,7 +162,7 @@ def usuario_index(request):
         context['error'] = request.session['error']
         del request.session['error']
         
-    usuarios = Usuario.objects.filter(rut__contains=filter)
+    usuarios = Usuario.objects.filter(rut__startswith=filter)
     context['filter'] = filter
     context['usuarios'] = usuarios
     
@@ -195,7 +197,7 @@ def usuario_create(request):
             context['success'] = 'Usuario registrado' 
             
         except Exception as e:
-            context['error'] = e.__str__ 
+            context['error'] = 'No se pudo registrar el usuario. ' + e.__str__() 
             
     return render(request, 'admin/usuario/create.html', context)
 
@@ -219,7 +221,7 @@ def usuario_update(request, id):
 
             return redirect('usuario_index')
         except Exception as e:
-            context['error'] = e.__str__
+            context['error'] = 'Error actualizando el usuario. ' + e.__str__()
     context['usuario'] = usuario
     return render(request, 'admin/usuario/edit.html', context)
 
@@ -231,7 +233,7 @@ def usuario_delete(request, id):
         usuario.delete()
         request.session['success'] = 'Usuario eliminado'
     except Exception as e:
-        request.session['error'] = 'No se pudo eliminar el usuario' + e.__str__
+        request.session['error'] = 'No se pudo eliminar el usuario. ' + e.__str__()
     
     return redirect('usuario_index')
 
@@ -261,7 +263,7 @@ def area_index(request):
         context['error'] = request.session['error']
         del request.session['error']
         
-    areas = Area.objects.filter(nombre__contains=filter)
+    areas = Area.objects.filter(nombre__startswith=filter)
     context['filter'] = filter
     context['areas'] = areas
     
@@ -285,7 +287,7 @@ def area_create(request):
             context['success'] = 'Area registrado' 
             
         except Exception as e:
-            context['error'] = e.__str__ 
+            context['error'] = 'No se pudo registrar el área. ' + e.__str__() 
             
     return render(request, 'admin/area/create.html', context)
 
@@ -305,7 +307,7 @@ def area_update(request, id):
 
             return redirect('area_index')
         except Exception as e:
-            context['error'] = e.__str__
+            context['error'] = 'Error actualizando el área. ' + e.__str__()
     context['area'] = area
     return render(request, 'admin/area/edit.html', context)
 
@@ -317,7 +319,7 @@ def area_delete(request, id):
         area.delete()
         request.session['success'] = 'Area eliminado'
     except Exception as e:
-        request.session['error'] = 'No se pudo eliminar el area' + e.__str__
+        request.session['error'] = 'No se pudo eliminar el area. ' + e.__str__()
     
     return redirect('area_index')
 
@@ -347,7 +349,7 @@ def estado_index(request):
         context['error'] = request.session['error']
         del request.session['error']
         
-    estados = Estado.objects.filter(nombre__contains=filter)
+    estados = Estado.objects.filter(nombre__startswith=filter)
     context['filter'] = filter
     context['estados'] = estados
     
@@ -371,7 +373,7 @@ def estado_create(request):
             context['success'] = 'Estado registrado' 
             
         except Exception as e:
-            context['error'] = e.__str__ 
+            context['error'] = 'No se pudo registrar el estado. ' + e.__str__() 
             
     return render(request, 'admin/estado/create.html', context)
 
@@ -391,8 +393,8 @@ def estado_update(request, id):
 
             return redirect('estado_index')
         except Exception as e:
-            context['error'] = e.__str__
-    context['estado'] = estado
+            context['error'] = e.__str__()
+    context['estado'] = 'Error actualizando estado. ' + estado
     return render(request, 'admin/estado/edit.html', context)
 
 @login_required
@@ -403,9 +405,153 @@ def estado_delete(request, id):
         estado.delete()
         request.session['success'] = 'Estado eliminado'
     except Exception as e:
-        request.session['error'] = 'No se pudo eliminar el estado' + e.__str__
+        request.session['error'] = 'No se pudo eliminar el estado. ' + e.__str__()
     
     return redirect('estado_index')
+
+#REQUERIMIENTO
+
+@login_required
+@role_required('admin')
+def requerimiento_index(request):
+    context = {}
+    
+    filter = request.GET.get('filter')
+    
+    if filter == None:
+        filter = ''
+        
+    if 'success' in request.session.keys():
+        context['success'] = request.session['success']
+        del request.session['success']
+    
+    if 'error' in request.session.keys():
+        context['error'] = request.session['error']
+        del request.session['error']
+    print('LLEGA')    
+    requerimientos = Requerimiento.objects.filter(
+        Q(codigo__startswith=filter) | 
+        Q(estado__nombre__startswith=filter) | 
+        Q(area__nombre__startswith=filter) | 
+        Q(usuario_reporta__rut__startswith=filter) |
+        Q(usuario_asignado__rut__startswith=filter)
+        )
+    context['filter'] = filter
+    context['requerimientos'] = requerimientos
+    
+    return render(request, 'admin/requerimiento/index.html', context)
+    
+
+@login_required
+@role_required('admin')
+def requerimiento_create(request):
+    context = {}
+    if request.method == 'POST':
+        try:
+            codigo = timezone.now().strftime("%Y%m%d%H%M%S")
+            descripcion = request.POST.get('descripcion')
+            usuario_reporta_id = request.POST.get('usuario_reporta_id')
+            area_id = request.POST.get('area_id')
+            estado_id = request.POST.get('estado_id')
+            
+            usuario_reporta = Usuario.objects.get(pk=usuario_reporta_id)
+            area = Area.objects.get(pk=area_id)
+            estado = Estado.objects.get(pk=estado_id)
+                      
+            Requerimiento.objects.create(
+                codigo=codigo, 
+                descripcion=descripcion,
+                usuario_reporta=usuario_reporta,
+                area=area,
+                usuario_asignado=None,
+                estado=estado,
+                observaciones=None
+                )
+            
+            context['success'] = 'Requerimiento registrado' 
+            
+        except Exception as e:
+            context['error'] = 'Error creando requerimiento. ' + e.__str__()
+    
+    context['usuarios'] = Usuario.objects.all()
+    context['areas'] = Area.objects.all()
+    context['estados'] = Estado.objects.all()
+            
+    return render(request, 'admin/requerimiento/create.html', context)
+
+@login_required
+@role_required('admin')
+def requerimiento_update(request, id):
+    requerimiento = get_object_or_404(Requerimiento, pk=id)
+    context = {}    
+    
+    if request.method == 'POST':
+        try:
+            requerimiento.descripcion = request.POST.get('descripcion')
+            usuario_reporta_id = request.POST.get('usuario_reporta_id')
+            area_id = request.POST.get('area_id')
+            usuario_asignado_id = request.POST.get('usuario_asignado_id')
+            estado_id = request.POST.get('estado_id')
+            requerimiento.observaciones = request.POST.get('observaciones')
+            
+            requerimiento.usuario_reporta = Usuario.objects.get(pk=usuario_reporta_id)
+            requerimiento.area = Area.objects.get(pk=area_id)
+            if usuario_asignado_id is not None and int(usuario_asignado_id) > 0 :
+                requerimiento.usuario_asignado = Usuario.objects.get(pk=usuario_asignado_id)
+            requerimiento.estado = Estado.objects.get(pk=estado_id)
+            requerimiento.save()
+            
+            request.session['success'] = 'Requerimiento actualizado'
+
+            return redirect('requerimiento_index')
+        except Exception as e:
+            context['error'] = 'Error actualizando requerimiento' + e.__str__()
+    
+    context['requerimiento'] = requerimiento
+    context['usuarios'] = Usuario.objects.all()
+    context['areas'] = Area.objects.all()
+    context['estados'] = Estado.objects.all()
+    
+    return render(request, 'admin/requerimiento/edit.html', context)
+
+@login_required
+@role_required('admin')
+def requerimiento_asignar(request, id):
+    requerimiento = get_object_or_404(Requerimiento, pk=id)
+    context = {}    
+    
+    if request.method == 'POST':
+        try:
+            usuario_asignado_id = request.POST.get('usuario_asignado_id')
+            estado_id = request.POST.get('estado_id')
+            
+            requerimiento.usuario_asignado = Usuario.objects.get(pk=usuario_asignado_id)
+            requerimiento.estado = Estado.objects.get(pk=estado_id)
+            requerimiento.save()
+            
+            request.session['success'] = 'Requerimiento asignado'
+
+            return redirect('requerimiento_index')
+        except Exception as e:
+            context['error'] = 'Error asignando requerimiento a usuario. ' + e.__str__()
+    
+    context['requerimiento'] = requerimiento
+    context['usuarios'] = Usuario.objects.all()
+    context['estados'] = Estado.objects.all()
+    
+    return render(request, 'admin/requerimiento/asignar.html', context)
+
+@login_required
+@role_required('admin')
+def requerimiento_delete(request, id):
+    requerimiento = get_object_or_404(Requerimiento, pk=id)
+    try:
+        requerimiento.delete()
+        request.session['success'] = 'Requerimiento eliminado'
+    except Exception as e:
+        request.session['error'] = 'No se pudo eliminar el requerimiento. ' + e.__str__()
+    
+    return redirect('requerimiento_index')
 
 #CLIENTE
 
