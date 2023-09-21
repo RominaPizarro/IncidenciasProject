@@ -44,7 +44,9 @@ def inicio_sesion(request):
         if user is not None:
             profile = Usuario.objects.get(user=user)
             
-            request.session['perfil'] = profile.role            
+            request.session['perfil'] = profile.role    
+            request.session['usuario_username'] = profile.user.username
+            request.session['usuario_id'] = profile.id
             
             login(request, user)
             
@@ -146,6 +148,36 @@ def exists_user(username):
 
 @login_required
 @role_required('admin')
+def usuario_perfil_admin(request):
+    usuario_id = request.session['usuario_id']        
+    usuario = Usuario.objects.get(pk=usuario_id)
+    
+    context = {}
+    
+    if request.method == 'POST':
+        try:
+            user = User.objects.get(pk=usuario.user.id)
+            user.first_name = request.POST.get('nombres')
+            user.last_name = request.POST.get('apellidos')
+            user.email = request.POST.get('email')
+            user.save()
+            
+            usuario.telefono = request.POST.get('telefono')
+            usuario.fecha_nacimiento = request.POST.get('fecha_nacimiento')
+            usuario.save()
+            
+            request.session['success'] = 'Perfil actualizado'
+            
+            return redirect('usuario_index')
+
+        except Exception as e:
+            context['error'] = 'Error actualizando el perfil. ' + e.__str__()
+    
+    context['usuario'] = usuario 
+    return render(request, 'admin/perfil.html', context)
+
+@login_required
+@role_required('admin')
 def usuario_index(request):
     context = {}
     
@@ -209,9 +241,12 @@ def usuario_update(request, id):
     
     if request.method == 'POST':
         try:
-            usuario.user.first_name = request.POST.get('nombres')
-            usuario.user.last_name = request.POST.get('apellidos')
-            usuario.user.email = request.POST.get('email')
+            user = User.objects.get(pk=usuario.user.id)
+            user.first_name = request.POST.get('nombres')
+            user.last_name = request.POST.get('apellidos')
+            user.email = request.POST.get('email')
+            user.save()
+            
             usuario.telefono = request.POST.get('telefono')
             usuario.fecha_nacimiento = request.POST.get('fecha_nacimiento')
             usuario.role = request.POST.get('role')
@@ -428,7 +463,7 @@ def requerimiento_index(request):
     if 'error' in request.session.keys():
         context['error'] = request.session['error']
         del request.session['error']
-    print('LLEGA')    
+       
     requerimientos = Requerimiento.objects.filter(
         Q(codigo__startswith=filter) | 
         Q(estado__nombre__startswith=filter) | 
@@ -558,5 +593,127 @@ def requerimiento_delete(request, id):
 @login_required
 @role_required('cliente')
 def dashboard_cliente(request):
-    return render(request, 'cliente/index.html')
+    return render(request, 'cliente/dashboard.html')
 
+@login_required
+@role_required('cliente')
+def usuario_perfil(request):
+    usuario_id = request.session['usuario_id']        
+    usuario = Usuario.objects.get(pk=usuario_id)
+    
+    context = {}
+    
+    if request.method == 'POST':
+        try:
+            user = User.objects.get(pk=usuario.user.id)
+            user.first_name = request.POST.get('nombres')
+            user.last_name = request.POST.get('apellidos')
+            user.email = request.POST.get('email')
+            user.save()
+            
+            usuario.telefono = request.POST.get('telefono')
+            usuario.fecha_nacimiento = request.POST.get('fecha_nacimiento')
+            usuario.save()
+            
+            request.session['success'] = 'Perfil actualizado'
+            
+            return redirect('mis_requerimientos')
+
+        except Exception as e:
+            context['error'] = 'Error actualizando el perfil. ' + e.__str__()
+    
+    context['usuario'] = usuario 
+    return render(request, 'cliente/perfil.html', context)
+
+@login_required
+@role_required('cliente')
+def mis_requerimientos(request):
+    usuario_id = request.session['usuario_id']
+    context = {}
+    
+    filter = request.GET.get('filter')
+    
+    if filter == None:
+        filter = ''
+        
+    if 'success' in request.session.keys():
+        context['success'] = request.session['success']
+        del request.session['success']
+    
+    if 'error' in request.session.keys():
+        context['error'] = request.session['error']
+        del request.session['error']
+       
+    requerimientos = Requerimiento.objects.filter(
+        Q(usuario_asignado_id=usuario_id) & (
+        Q(codigo__startswith=filter) | 
+        Q(estado__nombre__startswith=filter) | 
+        Q(area__nombre__startswith=filter) | 
+        Q(usuario_reporta__rut__startswith=filter)
+        )
+        )
+    context['filter'] = filter
+    context['requerimientos'] = requerimientos
+    
+    return render(request, 'cliente/mis-requerimientos.html', context)
+
+@login_required
+@role_required('cliente')
+def requerimiento_atender(request, id):
+    requerimiento = get_object_or_404(Requerimiento, pk=id)
+    context = {}    
+    
+    if request.method == 'POST':
+        try:
+            requerimiento.observaciones = request.POST.get('observaciones')
+            estado_id = request.POST.get('estado_id')
+            
+            requerimiento.estado = Estado.objects.get(pk=estado_id)
+            requerimiento.save()
+            
+            request.session['success'] = 'Requerimiento atendido'
+
+            return redirect('mis_requerimientos')
+        except Exception as e:
+            context['error'] = 'Error atendiendo requerimiento. ' + e.__str__()
+    
+    context['estados'] = Estado.objects.all()
+    context['requerimiento'] = requerimiento
+    
+    return render(request, 'cliente/atender-requerimiento.html', context)
+
+@login_required
+@role_required('cliente')
+def requerimiento_nuevo(request):
+    context = {}
+    if request.method == 'POST':
+        try:
+            codigo = timezone.now().strftime("%Y%m%d%H%M%S")
+            descripcion = request.POST.get('descripcion')
+            usuario_reporta_id = request.session['usuario_id']
+            area_id = request.POST.get('area_id')
+            estado_id = request.POST.get('estado_id')
+            
+            usuario_reporta = Usuario.objects.get(pk=usuario_reporta_id)
+            area = Area.objects.get(pk=area_id)
+            estado = Estado.objects.get(pk=estado_id)
+                      
+            Requerimiento.objects.create(
+                codigo=codigo, 
+                descripcion=descripcion,
+                usuario_reporta=usuario_reporta,
+                area=area,
+                usuario_asignado=None,
+                estado=estado,
+                observaciones=None
+                )
+            
+            context['success'] = 'Se envió el requerimiento al Administrador' 
+            
+        except Exception as e:
+            context['error'] = 'Error creando requerimiento. ' + e.__str__()
+    
+    context['areas'] = Area.objects.all()
+    context['estados'] = Estado.objects.all()
+    
+    return render(request, 'cliente/nuevo-requerimiento.html', context)

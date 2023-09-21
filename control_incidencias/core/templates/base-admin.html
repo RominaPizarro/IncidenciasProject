@@ -50,7 +50,7 @@
 
             <div>
                 <div class="navbar-nav">
-                    <a class="nav-link text-white" aria-current="page" href="./perfil.html">@usuario</a>
+                    <a class="nav-link text-white" aria-current="page" href="{% url 'usuario_perfil_admin' %}">@{{ request.session.usuario_username }}</a>
                     <a class="nav-link text-white" aria-current="page" href="{% url 'logout' %}">Cerrar Sesión</a>
                 </div>
             </div>

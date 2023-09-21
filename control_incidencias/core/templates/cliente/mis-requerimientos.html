@@ -1,4 +1,4 @@
-{% extends 'base-admin.html' %}
+{% extends 'base-client.html' %}
 
 {% block css %}
 {% endblock %}
@@ -6,13 +6,13 @@
 {% block contenido %}
 
     <div class="container-fluid p-5">
-        <h3>Requerimientos</h3>
+        <h3>Mis Requerimientos</h3>
         <hr>
 
         {% include 'message.html' %}
 
-        <form action="{% url 'requerimiento_index' %}" method="get">
-            <label for="filter" class="form-label">Buscar por Código, Usuario Reporta, Usuario Asignado o Estado</label>
+        <form action="{% url 'mis_requerimientos' %}" method="get">
+            <label for="filter" class="form-label">Buscar por Código, Usuario Reporta o Estado</label>
             <div class="row g-3">
                 <div class="col-md-6">
                     <input type="text" class="form-control" name="filter" value="{{filter}}">
@@ -21,7 +21,7 @@
                     <input class="btn btn-dark" type="submit" value="Buscar">
                 </div>
                 <div class="col text-end">
-                    <a class="btn btn-success" href="{% url 'requerimiento_create' %}">Crear Nuevo</a>
+                    <a class="btn btn-success" href="{% url 'requerimiento_nuevo' %}">Crear Nuevo</a>
                 </div>
             </div>
         </form>
@@ -49,18 +49,7 @@
                 <td>{{ item.descripcion }}</td>
                 <td>{{ item.observaciones }}</td>
                 <td class="text-end">
-                    <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Opciones
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{% url 'requerimiento_update' id=item.id %}">Editar</a></li>
-                            <li><a class="dropdown-item" href="{% url 'requerimiento_delete' id=item.id %}">Eliminar</a></li>
-                            <hr>
-                            <li><a class="dropdown-item" href="{% url 'requerimiento_asignar' id=item.id %}">Asignar</a></li>
-                        </ul>
-                    </div>
+                    <a class="btn btn-primary" href="{% url 'requerimiento_atender' id=item.id %}">Atender</a>
                 </td>
             </tr>
             {% endfor %}
