@@ -86,7 +86,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.oracle',
         'NAME': '127.0.0.1:1521/xe',
-        'USER': 'DB_INCIDENCIAS',
+        'USER': 'DB_CONTROL_INCIDENCIAS',
         'PASSWORD': 'incidencias_123',
         'TEST': {
             'USER': 'default_test',
