@@ -1,7 +1,7 @@
 
 from django.urls import path
 
-from .views import index, inicio_sesion, logout, logout_view, login_view, register, reset_password
+from .views import index, inicio_sesion, logout, logout_view, login_view, register, reset_password, change_password
 from .views import dashboard_admin
 from .views import usuario_index, usuario_create, usuario_update, usuario_delete, usuario_perfil_admin, usuario_perfil
 from .views import area_index, area_create, area_update, area_delete
@@ -19,6 +19,7 @@ urlpatterns = [
     path('login_view', login_view, name="login_view"),
     path('register', register, name="register"),
     path('reset-password', reset_password, name="reset_password"),
+    path('change-password/<int:user_id>', change_password, name="change_password"),
     
     #ADMIN
     path('dashboard-admin', dashboard_admin, name="dashboard_admin"),

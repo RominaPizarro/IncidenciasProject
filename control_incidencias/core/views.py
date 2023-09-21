@@ -26,7 +26,37 @@ def login_view(request):
     return render(request, 'auth/login.html')
 
 def reset_password(request):
-    return render(request, 'auth/reset-password.html')
+    
+    context = {}
+    
+    if request.method == 'POST':         
+        try:       
+            username = request.POST.get('username')
+            email = request.POST.get('email')
+            
+            user = User.objects.get(Q(username=username) & Q(email=email))          
+            
+            return redirect('change_password', user_id=user.id)
+        except Exception as e:
+            context = { 'error': 'No se econtró información con los datos ingresados' }
+    
+    return render(request, 'auth/reset-password.html', context)
+
+def change_password(request, user_id):
+    context = {}
+    user = get_object_or_404(User, pk=user_id)
+    
+    if request.method == 'POST':         
+        try:       
+            user.set_password(request.POST.get('password'))
+            user.save()       
+            
+            return redirect('login')
+        except Exception as e:
+            context = { 'error': 'No se pudo cambiar la contraseña' }
+    
+    context['user'] = user
+    return render(request, 'auth/change-password.html', context)
 
 def inicio_sesion(request):     
     if request.method == 'POST':
