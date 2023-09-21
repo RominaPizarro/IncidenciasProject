@@ -7,11 +7,11 @@
 
 [USUARIOS]
 Usuario administrador
-    correo = admin@gmail.com
-    username = admin
-    password = 123456
+- correo = admin@gmail.com
+- username = admin
+- password = 123456
 
 Usuario cliente
-    correo = anna@gmail.com
-    username = anna
-    password = 123456
+- correo = anna@gmail.com
+- username = anna
+- password = 123456
