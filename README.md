@@ -20,4 +20,4 @@ Usuario cliente
 - Listar todos los requerimientos. Tipo: GET, URL: api/requerimientos
 - Agregar nuevo requerimientos. Tipo: POST, URL: api/requerimientos
 
-Nota: en la carpeta "api" se encuentra el archivo con las peticiones postman para realizar las pruebas.
+Nota: en la carpeta "utils/api" se encuentra el archivo con las peticiones postman para realizar las pruebas.

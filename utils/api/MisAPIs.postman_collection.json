@@ -14,7 +14,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk2ODk3NDY0LCJpYXQiOjE2OTY4OTM4NjQsImp0aSI6ImZmM2IyNmViMDRlMDQxMGU5N2U0NjNlODYwZGZkNmRlIiwidXNlcl9pZCI6MX0.Ug4B8QlRTFxZqHTFw6dY56sOot5czcWVOYRF4I_VEo4",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk2OTIzNjk3LCJpYXQiOjE2OTY5MjAwOTcsImp0aSI6ImQ3ZjdiMTI3OTQzNzRhMmM4NjVhNzE2ZWUxNzBmZTQwIiwidXNlcl9pZCI6MX0.8rYUMg7Ihl-BvNELFHYh59_qCgCHjud8J8jF5huZ4OY",
 							"type": "string"
 						}
 					]
@@ -31,12 +31,13 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/api/requerimientos",
+					"raw": "http://control-incidencias-9f83f6c810c8.herokuapp.com/api/requerimientos",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"control-incidencias-9f83f6c810c8",
+						"herokuapp",
+						"com"
 					],
-					"port": "8000",
 					"path": [
 						"api",
 						"requerimientos"
@@ -53,7 +54,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk2ODk3NDY0LCJpYXQiOjE2OTY4OTM4NjQsImp0aSI6ImZmM2IyNmViMDRlMDQxMGU5N2U0NjNlODYwZGZkNmRlIiwidXNlcl9pZCI6MX0.Ug4B8QlRTFxZqHTFw6dY56sOot5czcWVOYRF4I_VEo4",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk2OTIzNjk3LCJpYXQiOjE2OTY5MjAwOTcsImp0aSI6ImQ3ZjdiMTI3OTQzNzRhMmM4NjVhNzE2ZWUxNzBmZTQwIiwidXNlcl9pZCI6MX0.8rYUMg7Ihl-BvNELFHYh59_qCgCHjud8J8jF5huZ4OY",
 							"type": "string"
 						}
 					]
@@ -61,12 +62,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8000/api/requerimientos",
+					"raw": "http://control-incidencias-9f83f6c810c8.herokuapp.com/api/requerimientos",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"control-incidencias-9f83f6c810c8",
+						"herokuapp",
+						"com"
 					],
-					"port": "8000",
 					"path": [
 						"api",
 						"requerimientos"
@@ -90,12 +92,13 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/token",
+					"raw": "http://control-incidencias-9f83f6c810c8.herokuapp.com/token",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"control-incidencias-9f83f6c810c8",
+						"herokuapp",
+						"com"
 					],
-					"port": "8000",
 					"path": [
 						"token"
 					]
@@ -118,12 +121,13 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/token/refresh",
+					"raw": "http://control-incidencias-9f83f6c810c8.herokuapp.com/token/refresh",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"control-incidencias-9f83f6c810c8",
+						"herokuapp",
+						"com"
 					],
-					"port": "8000",
 					"path": [
 						"token",
 						"refresh"
