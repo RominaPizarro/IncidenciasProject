@@ -86,20 +86,31 @@ WSGI_APPLICATION = "control_incidencias.wsgi.application"
 #    }
 #}
 
+#
+#DATABASES = {
+#'default': {
+#'ENGINE': 'django.db.backends.oracle',
+#'NAME': '127.0.0.1:1521/xe',
+#'USER': 'DB_CONTROL_INCIDENCIAS',
+#'PASSWORD': 'incidencias_123',
+#'TEST': {
+#'USER': 'default_test',
+#'TBLSPACE': 'default_test_tbls',
+#'TBLSPACE_TMP': 'default_test_tbls_tmp'
+#}
+#}
+#}
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.oracle',
-        'NAME': '127.0.0.1:1521/xe',
-        'USER': 'DB_CONTROL_INCIDENCIAS',
-        'PASSWORD': 'incidencias_123',
-        'TEST': {
-            'USER': 'default_test',
-            'TBLSPACE': 'default_test_tbls',
-            'TBLSPACE_TMP': 'default_test_tbls_tmp'
-        }
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'd7io28l5n48rn3',                      
+        'USER': 'bavipbtbimvlhn',
+        'PASSWORD': 'd7edd10920659b9b96e0070e217138628bea515c3732b60dbb97c7207716c5c6',
+        'HOST': 'ec2-3-210-173-88.compute-1.amazonaws.com',
+        'PORT': '5432',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
