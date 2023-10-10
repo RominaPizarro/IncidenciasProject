@@ -61,8 +61,8 @@ urlpatterns = [
     # API REST
     path('api', mi_api, name='api'),
     path('api/requerimientos', RequerimientoApiView.as_view(), name='requerimientos'),
-    path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('token/refresh/', MyTokenRefreshView.as_view(), name='token_refresh'),
+    path('token', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh', MyTokenRefreshView.as_view(), name='token_refresh'),
         
     # CONSUME APIs
     path('chistes-index-api', chistes_index_api, name='chistes_index_api'),
