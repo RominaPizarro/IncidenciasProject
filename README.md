@@ -15,3 +15,9 @@ Usuario cliente
 - correo = anna@gmail.com
 - username = anna
 - password = 123456
+
+# REST API
+- Listar todos los requerimientos. Tipo: GET, URL: api/requerimientos
+- Agregar nuevo requerimientos. Tipo: POST, URL: api/requerimientos
+
+Nota: en la carpeta "api" se encuentra el archivo con las peticiones postman para realizar las pruebas.

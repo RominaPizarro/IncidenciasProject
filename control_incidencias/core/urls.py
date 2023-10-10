@@ -7,6 +7,7 @@ from .views import usuario_index, usuario_create, usuario_update, usuario_delete
 from .views import area_index, area_create, area_update, area_delete
 from .views import estado_index, estado_create, estado_update, estado_delete
 from .views import requerimiento_index, requerimiento_create, requerimiento_update, requerimiento_delete, requerimiento_asignar, requerimiento_atender, mis_requerimientos, requerimiento_nuevo
+from .views import chistes_index_api, gatos_index_api
 
 from .views import dashboard_cliente
 
@@ -62,5 +63,8 @@ urlpatterns = [
     path('api/requerimientos', RequerimientoApiView.as_view(), name='requerimientos'),
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', MyTokenRefreshView.as_view(), name='token_refresh'),
-
+        
+    # CONSUME APIs
+    path('chistes-index-api', chistes_index_api, name='chistes_index_api'),
+    path('gatos-index-api', gatos_index_api, name='gatos_index_api'),
 ]

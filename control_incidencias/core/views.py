@@ -19,6 +19,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
+from django.http import JsonResponse
+import requests
+
 from .serializers import RequerimientoSerializer
 
 
@@ -858,3 +861,45 @@ def requerimiento_nuevo(request):
     context['estados'] = Estado.objects.all()
 
     return render(request, 'cliente/nuevo-requerimiento.html', context)
+
+#CONSUME APIs
+
+def chistes_index_api(request):
+    context = {}
+    if request.method == 'POST':
+        try:
+            amount = request.POST.get('amount')
+            api_url = 'https://v2.jokeapi.dev/joke/Any?lang=es&amount=' + amount
+            
+            response = requests.get(api_url)
+            
+            if response.status_code == 200:
+                data = response.json()
+                context['chistes'] = data['jokes']
+            else:
+                context['error'] = 'No se pudo obtener datos del API'
+            
+        except Exception as e:
+            context['error'] = 'Error consultando la API de chistes. ' + e.__str__()
+    
+    return render(request, 'mi_api.html', context)
+
+def gatos_index_api(request):
+    context = {}
+    try:
+        api_url = 'https://api.thecatapi.com/v1/images/search?limit=10'
+        
+        response = requests.get(api_url)
+        
+        if response.status_code == 200:
+            data = response.json()
+            context['gatos'] = data
+        else:
+            context['error'] = 'No se pudo obtener datos del API'
+        
+    except Exception as e:
+        context['error'] = 'Error consultando la API de gatos' + e.__str__()
+    
+    return render(request, 'mi_api.html', context)
+    
+    
