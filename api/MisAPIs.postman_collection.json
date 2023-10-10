@@ -1,0 +1,79 @@
+{
+	"info": {
+		"_postman_id": "98f9390a-10dc-44d5-b6fd-8868c56b4689",
+		"name": "MisAPIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15030091"
+	},
+	"item": [
+		{
+			"name": "NUEVO REQUERIMIENTO",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk2ODk3NDY0LCJpYXQiOjE2OTY4OTM4NjQsImp0aSI6ImZmM2IyNmViMDRlMDQxMGU5N2U0NjNlODYwZGZkNmRlIiwidXNlcl9pZCI6MX0.Ug4B8QlRTFxZqHTFw6dY56sOot5czcWVOYRF4I_VEo4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"descripcion\": \"Nuevo requerimiento\",\r\n    \"area_id\": 1,\r\n    \"estado_id\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/requerimientos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"requerimientos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LISTAR REQUERIMIENTOS",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk2ODk3NDY0LCJpYXQiOjE2OTY4OTM4NjQsImp0aSI6ImZmM2IyNmViMDRlMDQxMGU5N2U0NjNlODYwZGZkNmRlIiwidXNlcl9pZCI6MX0.Ug4B8QlRTFxZqHTFw6dY56sOot5czcWVOYRF4I_VEo4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/requerimientos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"requerimientos"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,69 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Incidencias</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(46, 46, 46);">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white" href="javascript: history.go(-1)">Control Incidencias</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <a class="nav-link text-white" aria-current="page" href="{% url 'api' %}">API</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-3">
+
+        <h3>Mis Rest API</h3>
+        <div class="text-end">
+            <a href="javascript: history.go(-1)">Volver</a>
+        </div>
+        <hr>
+
+        <div class="card">
+            <div class="card-header">Instrucciones</div>
+            <div class="card-body">
+                Se ha creado 2 RestAPI implementando seguridad basada en token
+                <ul>
+                    <li>Listar todos los requerimientos. Tipo: GET, url: api/requerimientos</li>
+                    <li>Agregar nuevo requerimiento. Tipo: POST, url: api/requerimientos</li>
+                </ul>
+
+                Desde postman realizar las peticiones. Agregar el token en Autorization tipo Bearer Token.<br><br>
+                <strong>Nota: </strong>En el repositorio carpeta "api" se encuentra el archivo "MisAPIs.postman_collection.json" 
+                que contiene las peticiones para realizar las pruebas
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'token_obtain_pair' %}" class="btn btn-primary">Generar Token</a>
+                <a href="{% url 'token_refresh' %}" class="btn btn-warning">Refrescar Token</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+
+</body>
+
+</html>

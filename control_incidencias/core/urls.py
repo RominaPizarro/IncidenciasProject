@@ -1,7 +1,7 @@
 
 from django.urls import path
 
-from .views import index, inicio_sesion, logout, logout_view, login_view, register, reset_password, change_password
+from .views import index, inicio_sesion, mi_api, logout, logout_view, login_view, register, reset_password, change_password
 from .views import dashboard_admin
 from .views import usuario_index, usuario_create, usuario_update, usuario_delete, usuario_perfil_admin, usuario_perfil
 from .views import area_index, area_create, area_update, area_delete
@@ -9,6 +9,8 @@ from .views import estado_index, estado_create, estado_update, estado_delete
 from .views import requerimiento_index, requerimiento_create, requerimiento_update, requerimiento_delete, requerimiento_asignar, requerimiento_atender, mis_requerimientos, requerimiento_nuevo
 
 from .views import dashboard_cliente
+
+from .views import RequerimientoApiView, MyTokenObtainPairView, MyTokenRefreshView
 
 urlpatterns = [
     path('', index, name="index"),
@@ -47,8 +49,6 @@ urlpatterns = [
     path('requerimientos/<int:id>/asignar', requerimiento_asignar, name="requerimiento_asignar"),
     path('requerimientos/<int:id>/delete', requerimiento_delete, name="requerimiento_delete"),
     
-    
-    
     #CLIENTE
     path('dashboard-cliente', dashboard_cliente, name="dashboard_cliente"),
     path('requerimientos/<int:id>/atender', requerimiento_atender, name="requerimiento_atender"),
@@ -56,4 +56,11 @@ urlpatterns = [
     path('mis_requerimientos', mis_requerimientos, name="mis_requerimientos"),
     
     path('accounts/*', inicio_sesion, name="accounts_login"),
+    
+    # API REST
+    path('api', mi_api, name='api'),
+    path('api/requerimientos', RequerimientoApiView.as_view(), name='requerimientos'),
+    path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', MyTokenRefreshView.as_view(), name='token_refresh'),
+
 ]
